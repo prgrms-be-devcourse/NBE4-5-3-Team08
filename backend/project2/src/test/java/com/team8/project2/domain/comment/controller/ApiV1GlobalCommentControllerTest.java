@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -70,4 +71,34 @@ class ApiV1GlobalCommentControllerTest {
 
         assertThat(commentRepository.findById(myComment.getId())).isEmpty();
     }
+
+
+    @Test
+    @DisplayName("BaseInitData 기반 - 내 댓글 조회")
+    void getMyCommentsList() throws Exception {
+        Member member1 = memberRepository.findById(1L)
+                .orElseThrow(() -> new RuntimeException("BaseInitData: memberId=1 not found"));
+        String tokenForUser1 = authTokenService.genAccessToken(member1);
+
+        // 사전 검증
+        long count = commentRepository.findAll().stream()
+                .filter(c -> c.getAuthor().getId().equals(1L))
+                .count();
+        System.out.println("✅ memberId=1 작성한 댓글 수: " + count); // member Id : 1의 댓글 개수는 현재 0이므로 0으로 출력됨
+
+        mockMvc.perform(get("/api/v1/comments/mycomments")
+                        .header("Authorization", "Bearer " + tokenForUser1))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("200-1"))
+                .andExpect(jsonPath("$.msg").value("내 댓글 조회 성공"))
+                .andExpect(jsonPath("$.data").isArray())
+                .andExpect(jsonPath("$.data.length()").value((int) count)); // 동적 대응
+
+        if (count > 0) {
+            mockMvc.perform(get("/api/v1/comments/mycomments")
+                            .header("Authorization", "Bearer " + tokenForUser1))
+                    .andExpect(jsonPath("$.data[0].authorId").value(1L));
+        }
+    }
+
 }
