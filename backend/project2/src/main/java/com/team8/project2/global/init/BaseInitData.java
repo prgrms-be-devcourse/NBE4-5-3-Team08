@@ -1,5 +1,13 @@
 package com.team8.project2.global.init;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import com.team8.project2.domain.comment.dto.CommentDto;
 import com.team8.project2.domain.comment.service.CommentService;
 import com.team8.project2.domain.curation.curation.entity.Curation;
@@ -12,15 +20,14 @@ import com.team8.project2.domain.member.entity.RoleEnum;
 import com.team8.project2.domain.member.repository.FollowRepository;
 import com.team8.project2.domain.member.repository.MemberRepository;
 import com.team8.project2.domain.playlist.dto.PlaylistCreateDto;
+import com.team8.project2.domain.playlist.dto.PlaylistDto;
+import com.team8.project2.domain.playlist.entity.Playlist;
+import com.team8.project2.domain.playlist.entity.PlaylistItem;
+import com.team8.project2.domain.playlist.repository.PlaylistItemRepository;
+import com.team8.project2.domain.playlist.repository.PlaylistRepository;
 import com.team8.project2.domain.playlist.service.PlaylistService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -28,8 +35,10 @@ public class BaseInitData {
 
 	private final MemberRepository memberRepository;
 	private final CurationRepository curationRepository;
+	private final PlaylistRepository playlistRepository;
 	private final CurationService curationService;
 	private final S3Uploader s3Uploader;
+	private final PlaylistItemRepository playlistItemRepository;
 
 	@Bean
 	public ApplicationRunner init(CommentService commentService, FollowRepository followRepository, PlaylistService playlistService) {
@@ -227,10 +236,19 @@ public class BaseInitData {
 					.isPublic(true)
 					.build();
 
-			playlistService.createPlaylist(playlistCreateDto, member);
-			System.out.println("✅ " + member.getUsername() + "이(가) 플레이리스트 생성: " + playlistTitles[i]);
+			PlaylistDto playlistDto = playlistService.createPlaylist(playlistCreateDto, member);
+			Playlist playlist = playlistRepository.findById(playlistDto.getId()).get();
+
+			// 플레이리스트에 큐레이션(1L) 추가
+			Curation curation = curationRepository.findById(1L).get();
+			PlaylistItem newItem = PlaylistItem.builder()
+				.itemId(1L)
+				.curation(curation)
+				.itemType(PlaylistItem.PlaylistItemType.CURATION)
+				.playlist(playlist)
+				.displayOrder(0)
+				.build();
+			playlistItemRepository.save(newItem);
 		}
 	}
-
-
 }

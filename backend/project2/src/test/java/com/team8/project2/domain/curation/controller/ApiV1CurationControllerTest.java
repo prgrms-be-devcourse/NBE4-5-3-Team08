@@ -28,6 +28,7 @@ import com.team8.project2.domain.member.entity.Member;
 import com.team8.project2.domain.member.entity.RoleEnum;
 import com.team8.project2.domain.member.repository.MemberRepository;
 import com.team8.project2.domain.member.service.AuthTokenService;
+import com.team8.project2.global.RedisUtils;
 
 @Transactional
 @ActiveProfiles("test")
@@ -39,14 +40,19 @@ public class ApiV1CurationControllerTest {
 	private MockMvc mockMvc;
 
 	@Autowired
-	private CurationService curationService; // 실제 서비스 사용
+	private CurationService curationService;
 
 	@Autowired
 	private CurationRepository curationRepository;
+
 	@Autowired
 	private MemberRepository memberRepository;
+
 	@Autowired
 	private AuthTokenService authTokenService;
+
+	@Autowired
+	private RedisUtils redisUtils;
 
 	private CurationReqDTO curationReqDTO;
 
@@ -75,6 +81,9 @@ public class ApiV1CurationControllerTest {
 		curationReqDTO.setLinkReqDtos(Collections.singletonList(linkReqDTO));
 		// 태그 리스트에 추가
 		curationReqDTO.setTagReqDtos(Collections.singletonList(tagReqDto));
+
+		// Redis 데이터 초기화
+		redisUtils.clearAllData();
 	}
 
 	@Test
@@ -431,4 +440,67 @@ public class ApiV1CurationControllerTest {
 			.andExpect(jsonPath("$.msg").value("접근이 거부되었습니다. 로그인 상태를 확인해 주세요."));
 	}
 
+	@Test
+	@DisplayName("특정 큐레이션을 포함하고 있는 자신의 플레이리스트 목록을 조회할 수 있다")
+	void findPlaylistByCuration() throws Exception {
+		var curationId = 1L;
+		mockMvc.perform(get("/api/v1/curation/%d/playlists".formatted(curationId))
+				.header("Authorization", "Bearer " + memberAccessKey))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200-1"))
+			.andExpect(jsonPath("$.msg").value("플레이리스트 조회 성공"))
+			.andExpect(jsonPath("$.data.length()").value(1))
+			.andExpect(jsonPath("$.data[0].id").value(1));
+	}
+
+	@Test
+	@DisplayName("트렌딩 태그를 조회할 수 있다")
+	void getTrendingTag() throws Exception {
+		mockMvc.perform(get("/api/v1/curation/trending-tag"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200-1"))
+			.andExpect(jsonPath("$.msg").value("트렌딩 태그가 조회되었습니다."))
+			.andExpect(jsonPath("$.data.tags.length()").value(5));
+	}
+
+	@Test
+	@DisplayName("트렌딩 큐레이션을 조회할 수 있다")
+	void getTrendingCuration() throws Exception {
+		mockMvc.perform(get("/api/v1/curation/trending-curation"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200-1"))
+			.andExpect(jsonPath("$.msg").value("트렌딩 큐레이션이 조회되었습니다."))
+			.andExpect(jsonPath("$.data.curations.length()").value(3));
+	}
+
+	@Test
+	@DisplayName("특정 큐레이션에 대해 자신이 좋아요를 눌렀는지 확인할 수 있다")
+	void getLikeStatus() throws Exception {
+		var curationId = 1L;
+		// member1이 curation1에 대한 좋아요 여부 조회 - false
+		mockMvc.perform(get("/api/v1/curation/like/%d/status".formatted(curationId))
+				.header("Authorization", "Bearer " + memberAccessKey))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200-1"))
+			.andExpect(jsonPath("$.msg").value("좋아요 여부 확인 성공"))
+			.andExpect(jsonPath("$.data").value(false));
+
+		// member1이 curation1를 좋아요함
+		mockMvc.perform(
+				post("/api/v1/curation/like/{id}", curationId)
+					.header("Authorization", "Bearer " + memberAccessKey)
+					.param("memberId", String.valueOf(member.getMemberId())))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200-1"))
+			.andExpect(jsonPath("$.msg").value("글에 좋아요를 했습니다."))
+			.andExpect(jsonPath("$.data").doesNotExist());
+
+		// member1이 curation1에 대한 좋아요 여부 조회 - true
+		mockMvc.perform(get("/api/v1/curation/like/%d/status".formatted(curationId))
+				.header("Authorization", "Bearer " + memberAccessKey))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.code").value("200-1"))
+			.andExpect(jsonPath("$.msg").value("좋아요 여부 확인 성공"))
+			.andExpect(jsonPath("$.data").value(true));
+	}
 }
