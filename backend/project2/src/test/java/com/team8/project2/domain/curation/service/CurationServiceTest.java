@@ -121,6 +121,7 @@ class CurationServiceTest {
 				"Test Content",
 				member
 		);
+		ReflectionTestUtils.setField(curation, "id", 1L);
 
 		link = Link.builder()
 				.id(1L)
@@ -172,6 +173,7 @@ class CurationServiceTest {
 				"Original Content",
 				member
 		);
+		ReflectionTestUtils.setField(curation, "id", 1L);
 
 		// Mocking 링크 및 태그
 		Link link = new Link();  // Link 객체를 생성하는 코드 필요 (예: getLink 메서드에서 반환할 객체 설정)
@@ -270,13 +272,15 @@ class CurationServiceTest {
 		when(redisTemplate.opsForSet()).thenReturn(setOperations);
 
 		// Mocking repository to return a Curation
+
 		when(curationRepository.findById(anyLong())).thenReturn(Optional.of(curation));
+
 
 		when(memberService.isFollowed(any(), any())).thenReturn(true);
 
 		Rq rq = mock(Rq.class);
 		when(rq.isLogin()).thenReturn(true);
-		when(rq.getActor()).thenReturn(mock(Member.class));
+		when(rq.getActor()).thenReturn(member);
 		ReflectionTestUtils.setField(curationService, "rq", rq);
 
 		CurationDetailResDto retrievedCuration = curationService.getCuration(1L, request);
@@ -303,9 +307,14 @@ class CurationServiceTest {
 		SetOperations<String, Object> setOperations = mock(SetOperations.class);
 		when(redisTemplate.opsForSet()).thenReturn(setOperations);
 
+		// 큐레이션 조회 로직이 제대로 동작하도록 설정
+		when(curationRepository.findById(anyLong())).thenReturn(Optional.of(curation));
+
+		when(memberService.isFollowed(any(), any())).thenReturn(true);
+
 		Rq rq = mock(Rq.class);
 		when(rq.isLogin()).thenReturn(true);
-		when(rq.getActor()).thenReturn(mock(Member.class));
+		when(rq.getActor()).thenReturn(member);
 		ReflectionTestUtils.setField(curationService, "rq", rq);
 
 		doNothing().when(curationViewService).increaseViewCount(curation);
@@ -315,16 +324,11 @@ class CurationServiceTest {
 				.thenReturn(true)  // 첫 번째 조회에서는 키가 없으므로 true 반환
 				.thenReturn(false); // 두 번째 이후의 조회에서는 키가 이미 있으므로 false 반환
 
-		// 큐레이션 조회 로직이 제대로 동작하도록 설정
-		when(curationRepository.findById(1L)).thenReturn(Optional.of(curation));
-
-		// 조회수 초기 상태 저장
-		Long initialViewCount = curation.getViewCount();
 
 		// When: 큐레이션을 여러 번 조회한다
-		curationService.getCuration(1L, request);  // 첫 번째 조회
-		curationService.getCuration(1L, request);  // 두 번째 조회
-		curationService.getCuration(1L, request);  // 세 번째 조회
+		curationService.getCuration(1L, request);
+		curationService.getCuration(1L, request);
+		curationService.getCuration(1L, request);
 
 		// Then: 조회수는 한 번만 증가해야 한다
 		verify(curationViewService, times(1)).increaseViewCount(curation);
@@ -360,7 +364,7 @@ class CurationServiceTest {
 		when(curationRepository.searchByFilters(ArgumentMatchers.anyList(), anyInt(), anyString(), anyString(), any(), any()))
 			.thenReturn(new PageImpl<>(List.of(curation), PageRequest.of(0, 20), 1));
 
-		List<CurationResDto> foundCurations = curationService.searchCurations(List.of("tag"), "title", "content", null,
+		List<CurationResDto> foundCurations = curationService.searchCurations(List.of("tag"), "title", "content", "",
 			SearchOrder.LATEST,1,20).getCurations();
 
 		// Verify the result
@@ -580,6 +584,7 @@ class CurationServiceTest {
 				member
 		);
 		c1.setViewCount(30);
+		ReflectionTestUtils.setField(c1, "id", 1L);
 
 		Curation c2 = new Curation(
 				"Test Title2",
@@ -587,12 +592,14 @@ class CurationServiceTest {
 				member
 		);
 		c2.setViewCount(40);
+		ReflectionTestUtils.setField(c2, "id", 2L);
 		Curation c3 = new Curation(
 				"Test Title3",
 				"Test Content3",
 				member
 		);
 		c3.setViewCount(50);
+		ReflectionTestUtils.setField(c3, "id", 3L);
 
 
 		ZSetOperations<String, Object> zSetOperations = mock(ZSetOperations.class);
@@ -630,16 +637,26 @@ class CurationServiceTest {
 				"Test Content1",
 				member
 		);
+		c1.setViewCount(30);
+		ReflectionTestUtils.setField(c1, "id", 1L);
+
 		Curation c2 = new Curation(
 				"Test Title2",
 				"Test Content2",
 				member
 		);
+		c2.setViewCount(100);
+		ReflectionTestUtils.setField(c2, "id", 2L);
+
+
 		Curation c3 = new Curation(
 				"Test Title1",
 				"Test Content1",
 				member
 		);
+		c3.setViewCount(50);
+		ReflectionTestUtils.setField(c3, "id", 3L);
+
 
 		when(curationRepository.findTop3ByOrderByViewCountDesc()).thenReturn(List.of(c1, c2, c3));
 

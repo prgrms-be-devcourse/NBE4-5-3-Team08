@@ -368,13 +368,13 @@ class CurationService(
      * @return 검색된 큐레이션 목록
      */
     fun searchCurations(
-        tags: List<String>,
-        title: String,
-        content: String,
-        author: String,
-        order: SearchOrder,
-        page: Int,
-        size: Int
+        tags: List<String> = emptyList(),
+        title: String = "",
+        content: String = "",
+        author: String = "",
+        order: SearchOrder = SearchOrder.LATEST,
+        page: Int = 0,
+        size: Int = 10
     ): CurationSearchResDto {
         var sort = Sort.by(Sort.Direction.DESC, "createdAt")
         if (order == SearchOrder.OLDEST) {
@@ -384,34 +384,36 @@ class CurationService(
             sort = Sort.by(Sort.Direction.DESC, "likeCount")
         }
         val pageable: Pageable = PageRequest.of(page, size, sort)
-        var curations: List<Curation>
         val curationPage: Page<Curation>
+        val curations: List<Curation>
 
-        if (tags == null || tags.isEmpty()) {
+        if (tags.isEmpty()) {
             // 태그가 없을 경우 필터 없이 검색
             curationPage = curationRepository.searchByFiltersWithoutTags(tags, title, content, author, pageable)
-            curations = curationPage!!.content
-                .map { curation: Curation? ->
-                    val redisKey = "curation_like:" + curation!!.id
-                    curation.likeCount = redisTemplate.opsForSet().size(redisKey)
-                    curation
-                }
+            curations = curationPage.content.map { curation ->
+                val redisKey = "curation_like:${curation.id}"
+                curation.likeCount = redisTemplate.opsForSet().size(redisKey)
+                curation
+            }
         } else {
             // 태그가 있을 경우 태그 필터 적용
             curationPage = curationRepository.searchByFilters(tags, tags.size, title, content, author, pageable)
-            curations = curationPage!!.content
-                .map { curation: Curation? ->
-                    val redisKey = "curation_like:" + curation!!.id
-                    curation.likeCount = redisTemplate.opsForSet().size(redisKey)
-                    curation
-                }
+            curations = curationPage.content.map { curation ->
+                val redisKey = "curation_like:${curation.id}"
+                curation.likeCount = redisTemplate.opsForSet().size(redisKey)
+                curation
+            }
         }
 
         return CurationSearchResDto.of(
-            curations, curationPage.totalPages, curationPage.totalElements,
-            curationPage.numberOfElements, curationPage.size
+            curations,
+            curationPage.totalPages,
+            curationPage.totalElements,
+            curationPage.numberOfElements,
+            curationPage.size
         )
     }
+
 
     @Transactional
     fun likeCuration(curationId: Long, memberId: Long) {
@@ -560,8 +562,7 @@ class CurationService(
             return when {
                 topCurations == null || topCurations.isEmpty() -> {
                     TrendingCurationResDto.of(
-                        curationRepository.findTop3ByOrderByViewCountDesc()
-                            ?: emptyList()
+                        curationRepository.findTop3ByOrderByViewCountDesc().sortedByDescending { it.viewCount },
                     )
                 }
 
