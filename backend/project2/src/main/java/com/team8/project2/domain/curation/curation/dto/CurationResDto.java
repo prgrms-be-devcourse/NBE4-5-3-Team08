@@ -2,6 +2,7 @@ package com.team8.project2.domain.curation.curation.dto;
 
 import com.team8.project2.domain.curation.curation.entity.Curation;
 import com.team8.project2.domain.curation.tag.entity.Tag;
+import com.team8.project2.domain.link.entity.Link;
 import lombok.Getter;
 import lombok.Setter;
 

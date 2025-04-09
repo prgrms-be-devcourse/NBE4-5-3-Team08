@@ -10,6 +10,7 @@ import com.team8.project2.domain.comment.entity.Comment;
 import com.team8.project2.domain.curation.curation.entity.Curation;
 import com.team8.project2.domain.curation.tag.entity.Tag;
 
+import com.team8.project2.domain.link.entity.Link;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
