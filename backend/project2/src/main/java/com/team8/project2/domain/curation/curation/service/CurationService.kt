@@ -150,8 +150,8 @@ class CurationService(
 
         for (imageName in imageNames) {
             val opImage = curationImageRepository.findByImageName(imageName)
-            if (opImage.isPresent) {
-                val curationImage = opImage.get()
+            if (opImage != null) {
+                val curationImage = opImage
                 curationImage.setCurationIdIfNull(curation.id)
                 curationImageRepository.save(curationImage)
             }

@@ -25,7 +25,7 @@ class CurationImage(
     @Column(name = "uploadedAt", nullable = false, updatable = false)
     val uploadedAt: LocalDateTime? = null
 
-    fun setCurationIdIfNull(curationId: Long) {
+    fun setCurationIdIfNull(curationId: Long?) {
         if (this.curationId == null) {
             this.curationId = curationId
         }
