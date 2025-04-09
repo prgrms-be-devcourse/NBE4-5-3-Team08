@@ -3,6 +3,8 @@ package com.team8.project2.domain.curation.curation.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.team8.project2.domain.curation.curation.entity.Curation;
+import com.team8.project2.domain.curation.curation.service.CurationService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,9 +22,7 @@ import com.team8.project2.domain.curation.curation.dto.CurationReqDTO;
 import com.team8.project2.domain.curation.curation.dto.CurationResDto;
 import com.team8.project2.domain.curation.curation.dto.CurationSearchResDto;
 import com.team8.project2.domain.curation.curation.dto.TrendingCurationResDto;
-import com.team8.project2.domain.curation.curation.entity.Curation;
 import com.team8.project2.domain.curation.curation.entity.SearchOrder;
-import com.team8.project2.domain.curation.curation.service.CurationService;
 import com.team8.project2.domain.curation.report.entity.ReportType;
 import com.team8.project2.domain.curation.tag.dto.TagResDto;
 import com.team8.project2.domain.curation.tag.service.TagService;

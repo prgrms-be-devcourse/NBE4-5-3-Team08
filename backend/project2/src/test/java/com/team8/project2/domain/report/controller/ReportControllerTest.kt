@@ -56,7 +56,7 @@ class ReportControllerTest
                 }.andExpect {
                     status { isOk() }
                     jsonPath("$.code", `is`("200-1"))
-                    jsonPath("$.data[0].curationId", `is`(curation.id.toInt()))
+                    jsonPath("$.data[0].curationId", `is`(curation.id!!.toInt()))
                     jsonPath("$.data[0].reportType", `is`("ABUSE"))
                 }
         }

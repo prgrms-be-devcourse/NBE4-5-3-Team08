@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.team8.project2.domain.curation.curation.entity.Curation;
+import com.team8.project2.domain.curation.curation.repository.CurationRepository;
+import com.team8.project2.domain.curation.curation.service.CurationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,9 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team8.project2.domain.curation.curation.dto.CurationReqDTO;
-import com.team8.project2.domain.curation.curation.entity.Curation;
-import com.team8.project2.domain.curation.curation.repository.CurationRepository;
-import com.team8.project2.domain.curation.curation.service.CurationService;
 import com.team8.project2.domain.curation.tag.dto.TagReqDto;
 import com.team8.project2.domain.link.dto.LinkReqDTO;
 import com.team8.project2.domain.member.entity.Member;
@@ -409,8 +409,7 @@ public class ApiV1CurationControllerTest {
 
 	private void createCurationWithTitleAndMember(String title, Member author) {
 		Curation curation = curationService.createCuration(title, "example content", List.of("https://www.google.com/"),
-			List.of("tag1", "tag2"), member);
-		curation.setMember(author);
+			List.of("tag1", "tag2"), author);
 		curationRepository.save(curation);
 	}
 

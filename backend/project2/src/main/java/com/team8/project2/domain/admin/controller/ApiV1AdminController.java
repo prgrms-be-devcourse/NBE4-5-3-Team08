@@ -2,6 +2,7 @@ package com.team8.project2.domain.admin.controller;
 
 import java.util.List;
 
+import com.team8.project2.domain.curation.curation.service.CurationService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team8.project2.domain.admin.dto.StatsResDto;
 import com.team8.project2.domain.admin.service.AdminService;
 import com.team8.project2.domain.comment.service.CommentService;
-import com.team8.project2.domain.curation.curation.service.CurationService;
 import com.team8.project2.domain.curation.report.dto.ReportedCurationsDetailResDto;
 import com.team8.project2.domain.curation.report.service.ReportService;
 import com.team8.project2.domain.member.entity.Member;

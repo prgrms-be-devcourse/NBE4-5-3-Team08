@@ -1,7 +1,6 @@
 package com.team8.project2.domain.curation.curation.dto;
 
 import com.team8.project2.domain.curation.curation.entity.Curation;
-
 import lombok.Getter;
 
 @Getter

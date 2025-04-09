@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+import com.team8.project2.domain.curation.curation.service.CurationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team8.project2.domain.curation.curation.service.CurationService;
 import com.team8.project2.domain.image.service.S3Uploader;
 import com.team8.project2.domain.member.dto.MemberReqDTO;
 import com.team8.project2.domain.member.entity.Member;

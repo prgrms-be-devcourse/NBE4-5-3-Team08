@@ -1,9 +1,6 @@
 package com.team8.project2.domain.link.entity;
 
 import com.team8.project2.domain.curation.curation.entity.CurationLink;
-import com.team8.project2.domain.link.dto.LinkResDTO;
-import com.team8.project2.global.exception.ServiceException;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,7 +35,7 @@ public class Link {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "linkId", nullable = false)
-	private Long id;
+	public Long id; // kotlin 전환 임시 public
 
 	/**
 	 * 링크 URL (필수값)

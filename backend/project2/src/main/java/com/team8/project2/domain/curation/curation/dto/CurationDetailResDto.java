@@ -135,7 +135,7 @@ public class CurationDetailResDto {
 	 * @return 변환된 상세 큐레이션 DTO
 	 */
 	public static CurationDetailResDto fromEntity(Curation curation, boolean isLiked, boolean isFollowed,
-		boolean isLogin) {
+												  boolean isLogin) {
 		return CurationDetailResDto.builder()
 			.id(curation.getId())
 			.title(curation.getTitle())

@@ -9,7 +9,6 @@ import java.util.Optional;
 import com.team8.project2.domain.curation.curation.repository.CurationRepository;
 import com.team8.project2.domain.image.service.S3Uploader;
 import com.team8.project2.domain.member.dto.CuratorInfoDto;
-import com.team8.project2.domain.member.dto.MemberReqDTO;
 
 import lombok.extern.slf4j.Slf4j;
 

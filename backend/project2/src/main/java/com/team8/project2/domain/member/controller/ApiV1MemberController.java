@@ -1,20 +1,19 @@
 package com.team8.project2.domain.member.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.team8.project2.domain.admin.service.AdminService;
 import com.team8.project2.domain.comment.entity.Comment;
 import com.team8.project2.domain.comment.service.CommentService;
 import com.team8.project2.domain.curation.curation.entity.Curation;
+import com.team8.project2.domain.curation.curation.service.CurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.team8.project2.domain.curation.curation.service.CurationService;
 import com.team8.project2.domain.member.dto.AllMemberResDto;
 import com.team8.project2.domain.member.dto.CuratorInfoDto;
 import com.team8.project2.domain.member.dto.FollowResDto;
@@ -24,7 +23,6 @@ import com.team8.project2.domain.member.dto.MemberResDTO;
 import com.team8.project2.domain.member.dto.MemberUpdateReqDTO;
 import com.team8.project2.domain.member.dto.UnfollowResDto;
 import com.team8.project2.domain.member.entity.Member;
-import com.team8.project2.domain.member.entity.RoleEnum;
 import com.team8.project2.domain.member.service.MemberService;
 import com.team8.project2.global.Rq;
 import com.team8.project2.global.dto.RsData;

@@ -3,6 +3,8 @@ package com.team8.project2.domain.admin.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.team8.project2.domain.curation.curation.entity.Curation;
+import com.team8.project2.domain.curation.curation.repository.CurationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.team8.project2.domain.admin.service.AdminService;
-import com.team8.project2.domain.curation.curation.entity.Curation;
-import com.team8.project2.domain.curation.curation.repository.CurationRepository;
 import com.team8.project2.domain.member.entity.Member;
 import com.team8.project2.domain.member.repository.MemberRepository;
 import com.team8.project2.domain.member.service.AuthTokenService;

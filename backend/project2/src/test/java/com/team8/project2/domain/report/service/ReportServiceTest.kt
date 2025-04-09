@@ -43,7 +43,7 @@ internal class ReportServiceTest {
         reportRepository.save(Report(curation, ReportType.ABUSE, reporter1))
 
         // when
-        val result = reportService.getReportedCurationsDetailResDtos(listOf(curation.getId()))
+        val result = reportService.getReportedCurationsDetailResDtos(listOf(curation.id!!))
 
         // then
         assertThat(result).hasSize(1)

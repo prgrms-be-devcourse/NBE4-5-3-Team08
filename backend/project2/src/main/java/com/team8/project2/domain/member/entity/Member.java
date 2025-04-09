@@ -36,7 +36,7 @@ public class Member {
 
 
     @Column(length = 100, unique = true)
-    private String memberId;
+    public String memberId; // kotlin public
     @Column(length = 100, unique = true, nullable = true)
     private String username;
     @Column(nullable = false)

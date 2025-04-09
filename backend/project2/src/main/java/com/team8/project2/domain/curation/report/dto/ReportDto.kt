@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 
 data class ReportDto(
     val reportId: Long, // 신고 ID
-    val curationId: Long, // 큐레이션 ID
+    val curationId: Long?, // 큐레이션 ID
     val curationTitle: String, // 큐레이션 제목
     val reportType: ReportType, // 신고 유형
     val reportDate: LocalDateTime, // 신고 날짜
