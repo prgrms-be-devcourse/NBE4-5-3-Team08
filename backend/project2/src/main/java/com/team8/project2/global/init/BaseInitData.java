@@ -233,24 +233,26 @@ public class BaseInitData {
 		for (int i = 0; i < playlistTitles.length; i++) {
 			Member member = members.get(i % members.size());
 
-			PlaylistCreateDto playlistCreateDto = PlaylistCreateDto.builder()
-					.title(playlistTitles[i])
-					.description(playlistDescriptions[i])
-					.isPublic(true)
-					.build();
+			PlaylistCreateDto playlistCreateDto = new PlaylistCreateDto(
+					playlistTitles[i],
+					playlistDescriptions[i],
+					true
+			);
 
 			PlaylistDto playlistDto = playlistService.createPlaylist(playlistCreateDto, member);
-			Playlist playlist = playlistRepository.findById(playlistDto.getId()).get();
+			Playlist playlist = playlistRepository.findById(playlistDto.getId()).orElseThrow();
 
-			// 플레이리스트에 큐레이션(1L) 추가
-			Curation curation = curationRepository.findById(1L).get();
-			PlaylistItem newItem = PlaylistItem.builder()
-				.itemId(1L)
-				.curation(curation)
-				.itemType(PlaylistItem.PlaylistItemType.CURATION)
-				.playlist(playlist)
-				.displayOrder(0)
-				.build();
+			Curation curation = curationRepository.findById(1L).orElseThrow();
+
+			PlaylistItem newItem = new PlaylistItem(
+					1L, // itemId
+					PlaylistItem.PlaylistItemType.CURATION,
+					playlist,
+					curation,
+					null, // parentItemId
+					0     // displayOrder
+			);
+
 			playlistItemRepository.save(newItem);
 		}
 	}

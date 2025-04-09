@@ -26,5 +26,11 @@ data class RsData<T>(
         fun success(msg: String = "Success"): RsData<Unit> {
             return RsData("200-1", msg, Unit)
         }
+
+        @JvmStatic
+        fun <T> fail(code: String = "400-1", msg: String = "요청이 올바르지 않습니다."): RsData<T> {
+            return RsData(code, msg, null)
+        }
+
     }
 }

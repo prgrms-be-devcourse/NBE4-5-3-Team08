@@ -3,7 +3,7 @@ name: Backend CI & Discord Notifications
 on:
   pull_request:
     branches: [ main ]
-    types: [ opened, closed ]
+    types: [ opened, closed, synchronize ]
   push:
     branches: [ main ]
   workflow_dispatch:
