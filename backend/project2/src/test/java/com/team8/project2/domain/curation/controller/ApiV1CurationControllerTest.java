@@ -1,15 +1,17 @@
 package com.team8.project2.domain.curation.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team8.project2.domain.curation.curation.dto.CurationReqDTO;
 import com.team8.project2.domain.curation.curation.entity.Curation;
 import com.team8.project2.domain.curation.curation.repository.CurationRepository;
 import com.team8.project2.domain.curation.curation.service.CurationService;
+import com.team8.project2.domain.curation.tag.dto.TagReqDto;
+import com.team8.project2.domain.link.dto.LinkReqDTO;
+import com.team8.project2.domain.member.entity.Member;
+import com.team8.project2.domain.member.entity.RoleEnum;
+import com.team8.project2.domain.member.repository.MemberRepository;
+import com.team8.project2.domain.member.service.AuthTokenService;
+import com.team8.project2.global.RedisUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,15 +22,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.team8.project2.domain.curation.curation.dto.CurationReqDTO;
-import com.team8.project2.domain.curation.tag.dto.TagReqDto;
-import com.team8.project2.domain.link.dto.LinkReqDTO;
-import com.team8.project2.domain.member.entity.Member;
-import com.team8.project2.domain.member.entity.RoleEnum;
-import com.team8.project2.domain.member.repository.MemberRepository;
-import com.team8.project2.domain.member.service.AuthTokenService;
-import com.team8.project2.global.RedisUtils;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
 @ActiveProfiles("test")
@@ -70,8 +70,8 @@ public class ApiV1CurationControllerTest {
 		curationReqDTO.setContent("Test Content");
 
 		// LinkReqDTO 생성
-		LinkReqDTO linkReqDTO = new LinkReqDTO();
-		linkReqDTO.setUrl("https://example.com");
+		LinkReqDTO linkReqDTO = new LinkReqDTO("https://test.com", null, null);
+
 
 		// TagReqDTO
 		TagReqDto tagReqDto = new TagReqDto("test");
@@ -409,7 +409,7 @@ public class ApiV1CurationControllerTest {
 
 	private void createCurationWithTitleAndMember(String title, Member author) {
 		Curation curation = curationService.createCuration(title, "example content", List.of("https://www.google.com/"),
-			List.of("tag1", "tag2"), author);
+				List.of("tag1", "tag2"), author);
 		curationRepository.save(curation);
 	}
 

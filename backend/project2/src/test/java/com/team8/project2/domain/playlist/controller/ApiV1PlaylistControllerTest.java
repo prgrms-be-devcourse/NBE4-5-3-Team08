@@ -2,12 +2,10 @@ package com.team8.project2.domain.playlist.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team8.project2.domain.link.dto.LinkReqDTO;
-import com.team8.project2.domain.link.entity.Link;
 import com.team8.project2.domain.link.service.LinkService;
 import com.team8.project2.domain.member.entity.Member;
-import com.team8.project2.domain.playlist.dto.*;
-import com.team8.project2.global.dto.RsData;
 import com.team8.project2.domain.member.repository.MemberRepository;
+import com.team8.project2.domain.playlist.dto.*;
 import com.team8.project2.domain.playlist.entity.PlaylistItem;
 import com.team8.project2.domain.playlist.service.PlaylistService;
 import com.team8.project2.global.Rq;
@@ -92,10 +90,12 @@ class ApiV1PlaylistControllerTest {
         Long playlistId = 1L;
         Long linkId = 100L;
 
-        LinkReqDTO linkReqDTO = new LinkReqDTO();
-        linkReqDTO.setUrl("https://example.com");
-        linkReqDTO.setTitle("테스트 링크");
-        linkReqDTO.setDescription("링크 설명");
+        LinkReqDTO linkReqDTO = new LinkReqDTO(
+                "https://example.com",
+                "테스트 링크",
+                "링크 설명"
+        );
+
 
         Link dummyLink = Link.builder()
                 .id(linkId)

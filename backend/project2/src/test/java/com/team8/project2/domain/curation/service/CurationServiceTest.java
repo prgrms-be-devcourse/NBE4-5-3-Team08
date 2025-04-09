@@ -22,7 +22,6 @@ import com.team8.project2.domain.curation.tag.entity.Tag;
 import com.team8.project2.domain.curation.tag.service.TagService;
 import com.team8.project2.domain.image.repository.CurationImageRepository;
 import com.team8.project2.domain.image.service.CurationImageService;
-import com.team8.project2.domain.link.entity.Link;
 import com.team8.project2.domain.link.service.LinkService;
 import com.team8.project2.domain.member.entity.Member;
 import com.team8.project2.domain.member.repository.MemberRepository;

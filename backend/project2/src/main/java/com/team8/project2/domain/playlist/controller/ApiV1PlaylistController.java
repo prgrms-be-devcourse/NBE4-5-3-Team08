@@ -1,9 +1,7 @@
 package com.team8.project2.domain.playlist.controller;
 
 import com.team8.project2.domain.link.dto.LinkReqDTO;
-import com.team8.project2.domain.link.entity.Link;
 import com.team8.project2.domain.link.service.LinkService;
-import com.team8.project2.domain.member.entity.Member;
 import com.team8.project2.domain.playlist.dto.*;
 import com.team8.project2.domain.playlist.entity.PlaylistItem;
 import com.team8.project2.domain.playlist.repository.PlaylistLikeRepository;
@@ -17,10 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * 플레이리스트(Playlist) API 컨트롤러 클래스입니다.
