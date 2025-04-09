@@ -67,7 +67,7 @@ class AdminService(
 		val pageable: Pageable = PageRequest.of(page, size, Sort.by("createdAt"))
 		val reportedCurations: List<Curation> = curationRepository.findReportedCurations(minReports, pageable)
 
-		return reportedCurations.map { it.id }
+		return reportedCurations.map { it.id!! }
 	}
 
 	fun getCurationAndPlaylistStats(): StatsResDto {
