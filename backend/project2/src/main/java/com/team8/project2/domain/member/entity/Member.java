@@ -91,4 +91,10 @@ public class Member {
     public String getProfileImage() {
         return this.profileImage;
     }
+
+    // TODO : ✅ Kotlin에서 접근 가능하도록 명시적 getter 추가
+    public String getMemberId() {
+        return this.memberId;
+    }
+
 }

@@ -1,5 +1,22 @@
 package com.team8.project2.domain.curation.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team8.project2.domain.curation.curation.dto.CurationReqDTO;
 import com.team8.project2.domain.curation.curation.entity.Curation;
@@ -12,23 +29,6 @@ import com.team8.project2.domain.member.entity.RoleEnum;
 import com.team8.project2.domain.member.repository.MemberRepository;
 import com.team8.project2.domain.member.service.AuthTokenService;
 import com.team8.project2.global.RedisUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Transactional
 @ActiveProfiles("test")
@@ -97,7 +97,7 @@ public class ApiV1CurationControllerTest {
 			.andExpect(jsonPath("$.msg").value("글이 성공적으로 생성되었습니다."))
 			.andExpect(jsonPath("$.data.title").value("Test Title"))
 			.andExpect(jsonPath("$.data.content").value("Test Content"))
-			.andExpect(jsonPath("$.data.urls[0].url").value("https://example.com"))
+			.andExpect(jsonPath("$.data.urls[0].url").value("https://test.com"))
 			.andExpect(jsonPath("$.data.tags[0].name").value("test"));
 	}
 
@@ -116,7 +116,7 @@ public class ApiV1CurationControllerTest {
 			.andExpect(jsonPath("$.data.title").value("Test Title"))
 			.andExpect(jsonPath("$.data.content").value("Test Content"))
 			.andExpect(jsonPath("$.data.urls.length()").value(1))
-			.andExpect(jsonPath("$.data.urls[0].url").value("https://example.com"))
+			.andExpect(jsonPath("$.data.urls[0].url").value("https://test.com"))
 			.andExpect(jsonPath("$.data.tags.length()").value(1))
 			.andExpect(jsonPath("$.data.tags[0].name").value("test"));
 	}

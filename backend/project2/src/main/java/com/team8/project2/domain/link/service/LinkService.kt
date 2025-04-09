@@ -147,7 +147,8 @@ class LinkService(
         val link = Link.builder()
             .url(actualUrl)
             .build()
-        link.loadMetadata()
+        // link.loadMetadata()
+        // TODO: 임시로 비활성화하고, 코틀린 전환 이후에 비동기로 처리 수정 예정
         return linkRepository.save(link)
     }
 
