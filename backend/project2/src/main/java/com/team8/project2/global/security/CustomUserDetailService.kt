@@ -15,7 +15,7 @@ class CustomUserDetailService(
             ?: throw UsernameNotFoundException("사용자를 찾을 수 없습니다.")
 
         return SecurityUser(
-            id = member.id,
+            id = member.id!!,
             username = member.getMemberId(),
             password = member.getPassword(),
             authorities = member.authorities,

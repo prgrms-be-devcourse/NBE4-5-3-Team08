@@ -25,12 +25,12 @@ class ApiV1ReportController(
     fun getReports(@PathVariable memberId: Long): RsData<List<ReportDto>> {
         val member = rq.actor
 
+
         require(member.id == memberId) {
             throw ServiceException("403-1", "회원 정보가 일치하지 않습니다.")
         }
 
         val reporter = memberService.findById(memberId)
-            .orElseThrow { ServiceException("404-1", "해당 회원을 찾을 수 없습니다.") }
 
         val reports = reportService.findAllByReporter(reporter)
         return RsData("200-1", "글이 성공적으로 조회되었습니다.", reports)

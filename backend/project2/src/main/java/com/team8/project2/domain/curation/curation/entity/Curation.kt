@@ -106,7 +106,7 @@ class Curation(
         get() = member.getUsername()
 
     val memberId: Long
-        get() = member.id
+        get() = member.id!!
 
     val memberImgUrl: String?
         get() = member.profileImage

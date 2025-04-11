@@ -33,7 +33,7 @@ class Rq(
     fun getAuthentication(member: Member): Authentication {
         val userDetails: UserDetails =
             SecurityUser(
-                member.id,
+                member.id!!,
                 member.getMemberId(),
                 "",
                 member.authorities,
@@ -65,7 +65,6 @@ class Rq(
 
             return memberService
                 .findById(principal.id)
-                .orElseThrow { ServiceException("404-1", "사용자를 찾을 수 없습니다.") }
         }
 
     val isLogin: Boolean
@@ -108,7 +107,6 @@ class Rq(
     fun getRealActor(actor: Member): Member =
         memberService
             .findById(actor.id)
-            .orElseThrow { ServiceException("404-1", "사용자를 찾을 수 없습니다.") }
 
     fun removeCookie(name: String) {
         val cookie =

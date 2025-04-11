@@ -6,6 +6,7 @@ import com.team8.project2.domain.image.service.S3Uploader
 import com.team8.project2.domain.member.dto.MemberReqDTO
 import com.team8.project2.domain.member.entity.RoleEnum
 import com.team8.project2.domain.member.repository.MemberRepository
+import com.team8.project2.domain.member.repository.findByIdOrThrow
 import com.team8.project2.domain.member.service.MemberService
 import com.team8.project2.global.exception.ServiceException
 import org.junit.jupiter.api.DisplayName
@@ -359,8 +360,8 @@ class ApiV1MemberControllerTest @Autowired constructor(
         fun follow() {
             val followeeId = 1L
             val followerId = 2L
-            val followee = memberService.findById(followeeId).get()
-            val member = memberRepository.findById(followerId).get()
+            val followee = memberService.findById(followeeId)
+            val member = memberRepository.findByIdOrThrow(followerId)
             val accessToken = memberService.genAccessToken(member)
 
             mvc.perform(
@@ -384,7 +385,7 @@ class ApiV1MemberControllerTest @Autowired constructor(
         fun follow_alreadyFollowed() {
             val followeeId = 1L
             val followerId = 3L
-            val followee = memberService.findById(followeeId).get()
+            val followee = memberService.findById(followeeId)
             val member = memberRepository.findById(followerId).get()
             val accessToken = memberService.genAccessToken(member)
 
@@ -423,7 +424,7 @@ class ApiV1MemberControllerTest @Autowired constructor(
         fun follow_self() {
             val followeeId = 1L
             val followerId = 1L
-            val followee = memberService.findById(followeeId).get()
+            val followee = memberService.findById(followeeId)
             val member = memberRepository.findById(followerId).get()
             val accessToken = memberService.genAccessToken(member)
 
@@ -442,7 +443,7 @@ class ApiV1MemberControllerTest @Autowired constructor(
         fun unfollow() {
             val followeeId = 1L
             val followerId = 3L
-            val followee = memberService.findById(followeeId).get()
+            val followee = memberService.findById(followeeId)
             val member = memberRepository.findById(followerId).get()
             val accessToken = memberService.genAccessToken(member)
 
@@ -466,7 +467,7 @@ class ApiV1MemberControllerTest @Autowired constructor(
         fun unfollow_notFollowed() {
             val followeeId = 3L
             val followerId = 1L
-            val followee = memberService.findById(followeeId).get()
+            val followee = memberService.findById(followeeId)
             val member = memberRepository.findById(followerId).get()
             val accessToken = memberService.genAccessToken(member)
 
@@ -486,8 +487,8 @@ class ApiV1MemberControllerTest @Autowired constructor(
             val followee1Id = 1L
             val followee2Id = 2L
             val followerId = 3L
-            val followee1 = memberService.findById(followee1Id).get()
-            val followee2 = memberService.findById(followee2Id).get()
+            val followee1 = memberService.findById(followee1Id)
+            val followee2 = memberService.findById(followee2Id)
             val member = memberRepository.findById(followerId).get()
             val accessToken = memberService.genAccessToken(member)
 

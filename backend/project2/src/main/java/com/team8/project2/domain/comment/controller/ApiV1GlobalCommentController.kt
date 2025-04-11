@@ -30,9 +30,8 @@ class ApiV1GlobalCommentController(
     fun getCommentsByCurationId(): RsData<List<CommentDto>> {
         val author = rq.actor
         val member = memberService.findById(author.id)
-            .orElseThrow { ServiceException("404-1", "해당 회원을 찾을 수 없습니다.") }
 
-        val commentDtos = commentService.findAllByAuthorId(member.id)
+        val commentDtos = commentService.findAllByAuthorId(member.id!!)
         return RsData.success("내 댓글 조회 성공", commentDtos)
     }
 

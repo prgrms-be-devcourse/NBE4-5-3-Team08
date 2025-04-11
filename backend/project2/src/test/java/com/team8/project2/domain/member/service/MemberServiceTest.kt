@@ -50,15 +50,14 @@ class MemberServiceTest {
     @DisplayName("회원 가입 - null 가능 필드가 모두 채워졌을 때 정상 저장된다.")
     fun join_Succeeds_WhenAllNullableFieldsAreFilled() {
         val member = Member(
-            "fullUser",  // memberId
-            "Full Name",  // username
-            "fullpw",  // password
-            RoleEnum.MEMBER,  // roleEnum
-            "fullImage.png",  // profileImage
-            "full@test.com",  // email
-            "Hello, I'm full user!" // introduce
+            memberId = "fullUser",
+            username = "Full Name",
+            password = "fullpw",
+            role = RoleEnum.MEMBER,
+            profileImage = "fullImage.png",
+            email = "full@test.com",
+            introduce = "Hello, I'm full user!"
         )
-
         whenever(
             memberRepository.save(
                 ArgumentMatchers.any(
@@ -82,13 +81,13 @@ class MemberServiceTest {
     @DisplayName("회원 가입 - null 가능 필드가 모두 비어 있을 때 정상 저장된다.")
     fun join_Succeeds_WhenAllNullableFieldsAreNull() {
         val member = Member(
-            "minimalUser",  // memberId
-            "username", // username
-            "minpw",  // password
-            RoleEnum.MEMBER,  // roleEnum
-            null,  // email
-            null,  // profileImage
-            null // introduce
+            memberId = "minimalUser",
+            username = "username",
+            password = "minpw",
+            role = RoleEnum.MEMBER,
+            profileImage = null,
+            email = null,
+            introduce = null
         )
 
         whenever(
@@ -112,7 +111,7 @@ class MemberServiceTest {
     @DisplayName("회원 삭제 - 존재하는 회원이면 정상적으로 삭제된다.")
     fun deleteMember_Succeeds_WhenMemberExists() {
         // given
-        val member = Member("user1")
+        val member = Member(memberId = "user1")
 
         whenever(memberRepository.findByMemberId("user1")).thenReturn(member)
 

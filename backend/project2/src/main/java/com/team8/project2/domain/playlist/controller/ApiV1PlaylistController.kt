@@ -163,7 +163,7 @@ class ApiV1PlaylistController(
     @PostMapping("/{id}/like")
     fun likePlaylist(@PathVariable id: Long): RsData<Unit> {
         val memberId = rq.actor.id
-        playlistService.likePlaylist(id, memberId)
+        playlistService.likePlaylist(id, memberId!!)
         return success("좋아요 상태가 토글되었습니다.", Unit)
     }
 
@@ -179,7 +179,7 @@ class ApiV1PlaylistController(
             return success("비로그인 상태입니다.", false)
         }
         val memberId = rq.actor.id
-        val liked = playlistService.hasLikedPlaylist(id, memberId)
+        val liked = playlistService.hasLikedPlaylist(id, memberId!!)
         return success("좋아요 상태 조회 성공", liked)
     }
 
@@ -242,7 +242,7 @@ class ApiV1PlaylistController(
     @GetMapping("/liked")
     fun getLikedPlaylists(): RsData<List<PlaylistDto>> {
         val memberId = rq.actor.id
-        val likedPlaylists = playlistService.getLikedPlaylistsFromRedis(memberId)
+        val likedPlaylists = playlistService.getLikedPlaylistsFromRedis(memberId!!)
         return success("좋아요한 플레이리스트 조회 성공", likedPlaylists)
     }
 

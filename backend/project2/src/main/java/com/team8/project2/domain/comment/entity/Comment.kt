@@ -72,7 +72,7 @@ class Comment(
 
     fun getAuthorName(): String = author.getUsername()
 
-    fun getAuthorId(): Long = author.id
+    fun getAuthorId(): Long = author.id!!
 
     fun getAuthorImgUrl(): String = author.profileImage.toString()
 

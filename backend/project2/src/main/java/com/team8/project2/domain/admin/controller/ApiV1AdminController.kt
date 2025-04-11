@@ -41,12 +41,7 @@ class ApiV1AdminController(
     @DeleteMapping("/members/{memberId}")
     fun deleteMember(@PathVariable memberId: Long): RsData<Unit> {
         val member = memberService.findById(memberId)
-            .orElseThrow {
-                ServiceException(
-                    "404-1",
-                    "해당 회원을 찾을 수 없습니다."
-                )
-            }
+
         adminService.deleteMember(member)
         return RsData.success("멤버가 삭제되었습니다.")
     }

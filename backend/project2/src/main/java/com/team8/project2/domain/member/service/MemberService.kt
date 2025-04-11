@@ -12,6 +12,7 @@ import com.team8.project2.domain.member.entity.RoleEnum
 import com.team8.project2.domain.member.event.ProfileImageUpdateEvent
 import com.team8.project2.domain.member.repository.FollowRepository
 import com.team8.project2.domain.member.repository.MemberRepository
+import com.team8.project2.domain.member.repository.findByIdOrThrow
 import com.team8.project2.global.Rq
 import com.team8.project2.global.exception.ServiceException
 import org.springframework.context.ApplicationEventPublisher
@@ -50,12 +51,12 @@ class MemberService(
             role = RoleEnum.MEMBER
         }
         val member = Member(
-            memberId!!,
-            password,
-            RoleEnum.MEMBER,  // 기본값 지정이 사라졌을 수 있으므로 명시
-            email,
-            profileImage,
-            introduce
+            memberId = memberId,
+            password = password,
+            role = RoleEnum.MEMBER,  // 기본값 지정이 사라졌을 수 있으므로 명시
+            email = email,
+            profileImage = profileImage,
+            introduce = introduce
         )
         return memberRepository.save(member)
     }
@@ -73,8 +74,8 @@ class MemberService(
         return memberRepository.findByUsername(username)
     }
 
-    fun findById(id: Long): Optional<Member> {
-        return memberRepository.findById(id)
+    fun findById(id: Long?): Member {
+        return memberRepository.findByIdOrThrow(id)
     }
 
     fun getAuthToken(member: Member?): String {
@@ -170,7 +171,7 @@ class MemberService(
         if (rq.isLogin) {
             isLogin = true
             val actor = rq.actor
-            isFollowed = followRepository.existsByFollowerIdAndFolloweeId(actor.id, member.id)
+            isFollowed = followRepository.existsByFollowerIdAndFolloweeId(actor.id!!, member.id!!)
         }
 
         return CuratorInfoDto(

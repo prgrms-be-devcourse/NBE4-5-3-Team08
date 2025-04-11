@@ -231,7 +231,6 @@ class CurationService(
         // 삭제 권한이 있는지 확인 (작성자와 요청자가 같은지 확인)
         println("어드민이야?" + member.isAdmin)
         println("어드민이야?" + curation.member!!.id)
-        println("어드민이야?" + member.getMemberId())
         if (curation.member!!.id != member.id && !member.isAdmin) {
             throw ServiceException("403-1", "권한이 없습니다.") // 권한 없음
         }
@@ -327,7 +326,7 @@ class CurationService(
         if (rq.isLogin) {
             isLogin = true
             val actor = rq.actor
-            isLiked = isLikedByMember(curationId, actor.id)
+            isLiked = isLikedByMember(curationId, actor.id!!)
             isFollowed = memberService.isFollowed(curation.memberId, actor.id)
         }
 
@@ -484,7 +483,7 @@ class CurationService(
      */
     fun getFollowingCurations(member: Member, page: Int, size: Int): List<CurationResDto> {
         val pageable: Pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"))
-        val followingCurations = curationRepository.findFollowingCurations(member.id, pageable)
+        val followingCurations = curationRepository.findFollowingCurations(member.id!!, pageable)
         return followingCurations.stream()
             .map { curation: Curation -> CurationResDto.from(curation) }
             .collect(Collectors.toList())

@@ -64,13 +64,13 @@ class BaseInitData(
 
     private fun createMember(email: String, username: String, memberId: String, displayName: String, password: String, profileImage: String, introduce: String, role: RoleEnum): Member {
         val member = Member(
-            memberId,
-            displayName,
-            password,
-            role,
-            profileImage,
-            email,
-            introduce
+            memberId = memberId,
+            username = displayName,
+            password = password,
+            role = role,
+            profileImage = profileImage,
+            email = email,
+            introduce = introduce
         )
 
         return memberRepository.save(member)

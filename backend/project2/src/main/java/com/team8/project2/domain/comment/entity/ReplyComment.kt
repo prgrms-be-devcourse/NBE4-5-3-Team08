@@ -75,5 +75,5 @@ class ReplyComment(
         this.content = content
     }
 
-    fun getAuthorId(): Long = author.id
+    fun getAuthorId(): Long = author.id!!
 }

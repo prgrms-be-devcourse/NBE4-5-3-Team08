@@ -3,6 +3,7 @@ package com.team8.project2.domain.member.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.team8.project2.domain.member.entity.Member
 import com.team8.project2.domain.member.entity.RoleEnum
+import com.team8.project2.global.exception.ServiceException
 import lombok.Data
 import java.time.LocalDateTime
 
@@ -38,7 +39,7 @@ data class MemberResDTO(
         @JvmStatic
         fun fromEntity(member: Member): MemberResDTO {
             return MemberResDTO(
-                id = member.id,
+                id = member.id?: throw ServiceException("400-1", "ID는 null일 수 없습니다."),
                 memberId = member.getMemberId(),
                 username = member.getUsername(),
                 email = member.email,

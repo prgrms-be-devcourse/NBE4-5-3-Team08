@@ -40,7 +40,7 @@ data class ReplyCommentDto(
         fun fromEntity(reply: ReplyComment): ReplyCommentDto {
             return ReplyCommentDto(
                 id = reply.id,
-                authorId = reply.author.id,
+                authorId = reply.author.id!!,
                 authorName = reply.author.getUsername(),
                 authorProfileImageUrl = reply.author.profileImage.toString(),
                 content = reply.content,

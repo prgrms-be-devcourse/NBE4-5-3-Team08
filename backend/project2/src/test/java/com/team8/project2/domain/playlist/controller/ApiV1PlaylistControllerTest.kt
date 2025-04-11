@@ -756,7 +756,7 @@ internal class ApiV1PlaylistControllerTest {
             )
         )
 
-        whenever(playlistService.getLikedPlaylistsFromRedis(mockMember.id)).thenReturn(likedPlaylists)
+        whenever(playlistService.getLikedPlaylistsFromRedis(mockMember.id!!)).thenReturn(likedPlaylists)
 
         // When & Then
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/playlists/liked"))
