@@ -38,9 +38,21 @@ internal class ReportServiceTest {
         val reporter1 = memberRepository.findById(2L).orElseThrow()
         val reporter2 = memberRepository.findById(3L).orElseThrow()
 
-        reportRepository.save(Report(curation, ReportType.ABUSE, reporter1))
-        reportRepository.save(Report(curation, ReportType.SPAM, reporter2))
-        reportRepository.save(Report(curation, ReportType.ABUSE, reporter1))
+        reportRepository.save(Report(
+            curation = curation,
+            reportType = ReportType.ABUSE,
+            reporter = reporter1,
+        ))
+        reportRepository.save(Report(
+            curation = curation,
+            reportType = ReportType.SPAM,
+            reporter = reporter2,
+        ))
+        reportRepository.save(Report(
+            curation = curation,
+            reportType = ReportType.ABUSE,
+            reporter = reporter1,
+        ))
 
         // when
         val result = reportService.getReportedCurationsDetailResDtos(listOf(curation.id!!))

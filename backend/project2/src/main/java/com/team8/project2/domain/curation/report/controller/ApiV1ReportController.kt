@@ -25,7 +25,8 @@ class ApiV1ReportController(
     fun getReports(@PathVariable memberId: Long): RsData<List<ReportDto>> {
         val member = rq.actor
 
-        if (!member.id!!.equals(memberId)) {
+
+        require(member.id == memberId) {
             throw ServiceException("403-1", "회원 정보가 일치하지 않습니다.")
         }
 

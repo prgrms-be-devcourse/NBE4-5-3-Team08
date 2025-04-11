@@ -20,7 +20,9 @@ class TagService(
      * @param name 태그 이름
      * @return 기존 또는 새로 생성된 태그 객체
      */
-    fun getTag(name: String): Tag = tagRepository.findByName(name) ?: tagRepository.save(Tag(name))
+    fun getTag(name: String): Tag = tagRepository.findByName(name) ?: run {
+        tagRepository.save(Tag(name))
+    }
 
     // 많이 사용된 tag 수 반환
     @Transactional(readOnly = true)

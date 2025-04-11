@@ -2,7 +2,13 @@ package com.team8.project2.domain.curation.like.entity
 
 import com.team8.project2.domain.curation.curation.entity.Curation
 import com.team8.project2.domain.member.entity.Member
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Embeddable
+import jakarta.persistence.EmbeddedId
+import jakarta.persistence.Entity
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.Table
 import java.io.Serializable
 
 /**
@@ -11,27 +17,27 @@ import java.io.Serializable
  */
 @Entity
 @Table(name = "likes")
-class Like {
+class Like private constructor(
     /**
      * 좋아요의 복합 키를 정의하는 ID 클래스
      */
     @EmbeddedId
-    lateinit var id: LikeId
+    val id: LikeId,
 
     /**
      * 좋아요가 설정된 큐레이션 (다대일 관계)
      */
     @ManyToOne
     @JoinColumn(name = "curationId", insertable = false, updatable = false)
-    lateinit var curation: Curation
+    val curation: Curation,
 
     /**
      * 좋아요를 누른 회원 (다대일 관계)
      */
     @ManyToOne
     @JoinColumn(name = "memberId", insertable = false, updatable = false)
-    lateinit var member: Member
-
+    val member: Member
+) {
     /**
      * 좋아요를 설정하는 메서드
      * @param curation 좋아요가 설정될 큐레이션
@@ -39,21 +45,12 @@ class Like {
      * @return 설정된 Like 객체
      */
     companion object {
-        @JvmStatic
-        fun of(
-            curation: Curation,
-            member: Member,
-        ): Like {
-            val likeId =
-                LikeId(
-                    curationId = curation.id,
-                    memberId = member.id,
-                )
-            return Like().apply {
-                id = likeId
-                this.curation = curation
-                this.member = member
-            }
+        fun of(curation: Curation, member: Member): Like {
+            return Like(
+                id = LikeId(curation.id, member.id),
+                curation = curation,
+                member = member
+            )
         }
     }
 

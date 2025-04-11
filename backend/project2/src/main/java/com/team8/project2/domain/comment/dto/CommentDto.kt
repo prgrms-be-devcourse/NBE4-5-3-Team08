@@ -15,10 +15,10 @@ data class CommentDto(
 	val id: Long? = null,
 
 	/** 댓글 작성자의 사용자 ID */
-	val authorName: String? = null,
+	val authorName: String?,
 
 	/** 댓글 작성자의 프로필 이미지 */
-	val authorProfileImageUrl: String? = null,
+	val authorProfileImageUrl: String?,
 
 	/** 댓글 내용 */
 	val content: String,

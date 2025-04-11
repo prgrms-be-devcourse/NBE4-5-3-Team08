@@ -17,28 +17,28 @@ import java.time.LocalDateTime
 class ReplyComment(
 
     /**
-     * 댓글 작성자의 사용자 ID
+     * 답글 작성자의 사용자 ID
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "memberId", nullable = false)
     var author: Member,
 
     /**
-     * 상위 댓글
+     * 상위 답글
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commentId", nullable = false)
     var comment: Comment,
 
     /**
-     * 댓글이 속한 큐레이션
+     * 답글이 속한 큐레이션
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "curation_id", nullable = false)
     var curation: Curation,
 
     /**
-     * 댓글 내용 (텍스트 형태, 필수값)
+     * 답글 내용 (텍스트 형태, 필수값)
      */
     @Column(nullable = false, columnDefinition = "TEXT")
     var content: String

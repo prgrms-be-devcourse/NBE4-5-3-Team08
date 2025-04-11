@@ -9,27 +9,20 @@ import com.team8.project2.domain.playlist.entity.PlaylistItem
 data class PlaylistItemDto(
     /** 플레이리스트 아이템 ID (PlaylistItem 자체의 ID) */
     val id: Long?,
-
     /** 참조 대상 ID (LINK ID 또는 CURATION ID) */
     val itemId: Long,
-
     /** 아이템 유형 (LINK 또는 CURATION) */
     val itemType: String,
-
     /** 링크 제목 */
     val title: String,
-
     /** 링크 설명 */
     val description: String,
-
     /** 링크 URL */
     val url: String,
-
     /** 큐레이션 ID (nullable) */
     val curationId: Long?,
-
     /** 부모 아이템 ID (nullable) */
-    val parentItemId: Long?
+    val parentItemId: Long?,
 ) {
     companion object {
         /**
@@ -37,7 +30,6 @@ data class PlaylistItemDto(
          * @param playlistItem 변환할 플레이리스트 아이템 엔티티
          * @return 변환된 PlaylistItemDto
          */
-        @JvmStatic
         fun fromEntity(playlistItem: PlaylistItem): PlaylistItemDto {
             val link = playlistItem.link
             val curation = playlistItem.curation
@@ -50,7 +42,7 @@ data class PlaylistItemDto(
                 description = link?.description.orEmpty(),
                 url = link?.url.orEmpty(),
                 curationId = curation?.id,
-                parentItemId = playlistItem.parentItemId
+                parentItemId = playlistItem.parentItemId,
             )
         }
     }

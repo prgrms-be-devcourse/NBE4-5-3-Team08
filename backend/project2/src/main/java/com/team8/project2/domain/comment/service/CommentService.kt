@@ -120,10 +120,13 @@ class CommentService(
 
 	/**
 	 * 특정 사용자(author)가 작성한 모든 댓글 조회
+	 * Entity -> DTO 변환
 	 */
-	fun findAllByAuthor(author: Member): List<Comment> {
+	fun findAllByAuthor(author: Member): List<CommentDto> {
 		return commentRepository.findAllByAuthor(author)
+			.map { CommentDto.fromEntity(it) }
 	}
+
 
 	/**
 	 * 답글 생성

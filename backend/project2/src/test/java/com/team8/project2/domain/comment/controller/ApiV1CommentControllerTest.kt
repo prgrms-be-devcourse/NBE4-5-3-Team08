@@ -61,7 +61,10 @@ class ApiV1CommentControllerTest {
     @Test
     @DisplayName("BaseInitData 기반 - 댓글을 작성할 수 있다")
     fun createComment() {
-        val commentDto = CommentDto(content = "BaseInitData 댓글 작성 테스트")
+        val commentDto = CommentDto(
+            authorName = "테스트유저",
+            authorProfileImageUrl = "https://example.com/image.jpg",
+            content = "BaseInitData 댓글 작성 테스트")
 
         mockMvc.perform(
             post("/api/v1/curations/1/comments")
@@ -80,7 +83,10 @@ class ApiV1CommentControllerTest {
     @Test
     @DisplayName("실패 - 인증 정보가 없으면 댓글 작성에 실패한다")
     fun createCommentWithNoAuth() {
-        val commentDto = CommentDto(content = "unauth comment")
+        val commentDto = CommentDto(
+            authorName = "테스트유저",
+            authorProfileImageUrl = "https://example.com/image.jpg",
+            content = "unauth comment")
 
         mockMvc.perform(
             post("/api/v1/curations/1/comments")
@@ -112,7 +118,11 @@ class ApiV1CommentControllerTest {
     @Test
     @DisplayName("답글을 작성할 수 있다")
     fun createReply() {
-        val replyDto = CommentDto(content = "답글 테스트")
+        
+        val replyDto = CommentDto(
+            authorName = "테스트유저",
+            authorProfileImageUrl = "https://example.com/image.jpg",
+            content = "답글 테스트")
 
         mockMvc.perform(
             post("/api/v1/curations/1/comments/1/reply")
@@ -130,7 +140,10 @@ class ApiV1CommentControllerTest {
     @DisplayName("답글을 수정할 수 있다")
     fun updateReply() {
         val comment = createCommentAtCuration(1L, author)
-        val replyDto = CommentDto(content = "원래 답글")
+        val replyDto = CommentDto(
+            authorName = "테스트유저",
+            authorProfileImageUrl = "https://example.com/image.jpg",
+            content = "원래 답글")
 
         val response = mockMvc.perform(
             post("/api/v1/curations/1/comments/${comment.id}/reply")
@@ -160,7 +173,10 @@ class ApiV1CommentControllerTest {
         val other = memberRepository.findById(2L).get()
         val otherToken = authTokenService.genAccessToken(other)
 
-        val commentDto = CommentDto(content = "댓글")
+        val commentDto = CommentDto(
+            authorName = "테스트유저",
+            authorProfileImageUrl = "https://example.com/image.jpg",
+            content = "댓글")
         val commentResponse = mockMvc.perform(
             post("/api/v1/curations/1/comments")
                 .header("Authorization", "Bearer $authorAccessKey")
@@ -169,7 +185,10 @@ class ApiV1CommentControllerTest {
         ).andReturn().response.contentAsString
         val commentId = JsonPath.read<Any>(commentResponse, "$.data.id").toString().toLong()
 
-        val replyDto = CommentDto(content = "남의 답글")
+        val replyDto = CommentDto(
+            authorName = "테스트유저",
+            authorProfileImageUrl = "https://example.com/image.jpg",
+            content = "남의 댓글")
         val replyResponse = mockMvc.perform(
             post("/api/v1/curations/1/comments/$commentId/reply")
                 .header("Authorization", "Bearer $authorAccessKey")
@@ -189,7 +208,10 @@ class ApiV1CommentControllerTest {
 
 
     private fun createCommentAtCuration(curationId: Long, author: Member): CommentDto {
-        val commentDto = CommentDto(content = "content example")
+        val commentDto = CommentDto(
+            authorName = "테스트유저",
+            authorProfileImageUrl = "https://example.com/image.jpg",
+            content = "content example")
         return commentService.createComment(author, curationId, commentDto)
     }
 

@@ -13,7 +13,6 @@ import java.time.LocalDateTime
 @Entity
 @EntityListeners(AuditingEntityListener::class)
 class Playlist(
-
     /** 플레이리스트의 고유 ID (자동 생성) */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +48,7 @@ class Playlist(
     @JoinTable(
         name = "PlaylistTag",
         joinColumns = [JoinColumn(name = "playlist_id")],
-        inverseJoinColumns = [JoinColumn(name = "tag_id")]
+        inverseJoinColumns = [JoinColumn(name = "tag_id")],
     )
     var tags: MutableSet<Tag> = mutableSetOf(),
 
@@ -70,7 +69,11 @@ class Playlist(
      * @param description 변경할 설명 (null일 경우 변경 없음)
      * @param isPublic 변경할 공개 여부 (null일 경우 변경 없음)
      */
-    fun updatePlaylist(title: String?, description: String?, isPublic: Boolean?) {
+    fun updatePlaylist(
+        title: String?,
+        description: String?,
+        isPublic: Boolean?,
+    ) {
         title?.let { this.title = it }
         description?.let { this.description = it }
         isPublic?.let { this.isPublic = it }

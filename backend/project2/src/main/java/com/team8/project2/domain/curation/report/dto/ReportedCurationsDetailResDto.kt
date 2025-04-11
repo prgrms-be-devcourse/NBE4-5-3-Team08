@@ -16,17 +16,19 @@ data class ReportedCurationsDetailResDto(
     )
 
     companion object {
-        @JvmStatic
         fun from(curation: Curation, reports: List<Report>): ReportedCurationsDetailResDto {
-            val grouped = reports.groupingBy { it.reportType }
+            val reportTypeCounts = reports
+                .groupingBy { it.reportType }
                 .eachCount()
-                .map { (type, count) -> ReportCountResDto(type, count.toLong()) }
+                .map { (type, count) ->
+                    ReportCountResDto(type, count.toLong())
+                }
 
             return ReportedCurationsDetailResDto(
-                curationId = curation.id!!,
-                curationTitle = curation.title!!,
-                authorName = curation.memberName!!,
-                reportTypeCounts = grouped
+                curationId = curation.id ?: error("curation.id must not be null"),
+                curationTitle = curation.title,
+                authorName = curation.memberName,
+                reportTypeCounts = reportTypeCounts
             )
         }
     }

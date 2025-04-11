@@ -48,7 +48,11 @@ class ReportControllerTest
         @DisplayName("신고한 큐레이션 목록을 조회할 수 있다")
         fun getMyReportedCurations() {
             val curation: Curation = curationRepository.findById(1L).orElseThrow()
-            reportRepository.save(Report(curation, ReportType.ABUSE, reporter))
+            reportRepository.save(Report(
+                curation = curation,
+                reportType = ReportType.ABUSE,
+                reporter = reporter,
+            ))
 
             mockMvc
                 .get("/api/v1/reports/myreported/${reporter.id}") {

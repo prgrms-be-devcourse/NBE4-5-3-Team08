@@ -1,7 +1,13 @@
 package com.team8.project2.domain.curation.tag.entity
 
 import com.team8.project2.domain.curation.curation.entity.CurationTag
-import jakarta.persistence.*
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
 
 /**
  * 태그(Tag) 엔티티 클래스입니다.

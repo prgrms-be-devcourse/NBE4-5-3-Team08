@@ -43,7 +43,6 @@ import java.util.*
 @ExtendWith(MockitoExtension::class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class PlaylistServiceTest {
-
     private lateinit var playlistService: PlaylistService
 
     @Mock
@@ -115,13 +114,15 @@ class PlaylistServiceTest {
         whenever(redisTemplate.opsForZSet()).thenReturn(zSetOperations)
 
         playlistService = PlaylistService(
-            playlistRepository,
-            redisTemplate,
-            memberRepository,
-            playlistLikeRepository,
-            rq,
-            linkService
+            playlistRepository = playlistRepository,
+            playlistItemRepository = playlistItemRepository,
+            redisTemplate = redisTemplate,
+            memberRepository = memberRepository,
+            playlistLikeRepository = playlistLikeRepository,
+            rq = rq,
+            linkService = linkService,
         )
+
 
     }
 
@@ -477,7 +478,7 @@ class PlaylistServiceTest {
                         description = "설명1",
                         tags = mutableSetOf(),
                         member = sampleMember,
-                        createdAt = LocalDateTime.now()
+                        createdAt = LocalDateTime.now(),
                     ),
                     Playlist(
                         id = 3L,
@@ -485,9 +486,9 @@ class PlaylistServiceTest {
                         description = "설명2",
                         tags = mutableSetOf(),
                         member = sampleMember,
-                        createdAt = LocalDateTime.now()
-                    )
-                )
+                        createdAt = LocalDateTime.now(),
+                    ),
+                ),
             )
 
         // When
@@ -807,24 +808,13 @@ class PlaylistServiceTest {
         whenever(rq.actor).thenReturn(member)
         whenever(playlistRepository.findById(originalPlaylist.id))
             .thenReturn(Optional.of(originalPlaylist))
-        whenever(playlistRepository.save(any()))
-            .thenAnswer { invocation ->
-                val playlist = invocation.arguments[0] as Playlist
-                Playlist(
-                    id = 101L,
-                    title = playlist.title,
-                    description = playlist.description,
-                    isPublic = playlist.isPublic,
-                    viewCount = playlist.viewCount,
-                    likeCount = playlist.likeCount,
-                    tags = playlist.tags,
-                    items = playlist.items,
-                    createdAt = LocalDateTime.now(),
-                    modifiedAt = playlist.modifiedAt,
-                    member = playlist.member
-                )
-            }
-
+        whenever(playlistRepository.save(any())).thenAnswer { invocation ->
+            val playlist = invocation.arguments[0] as Playlist
+            playlist.id = 101L
+            playlist.createdAt = LocalDateTime.now()
+            playlist.member = member
+            playlist
+        }
 
         // when
         val result = playlistService.addPublicPlaylist(requireNotNull(originalPlaylist.id))
@@ -916,8 +906,8 @@ class PlaylistServiceTest {
                 url = updateDto.url,
                 title = updateDto.title,
                 description = updateDto.description,
-                createdAt = LocalDateTime.now()
-            )
+                createdAt = LocalDateTime.now(),
+            ),
         )
 
         // when

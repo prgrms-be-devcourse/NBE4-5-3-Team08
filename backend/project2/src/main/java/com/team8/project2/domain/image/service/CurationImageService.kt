@@ -15,27 +15,17 @@ class CurationImageService(
 
     @Transactional
     @Throws(IOException::class)
-    fun uploadImage(file: MultipartFile): String {
-        val imageName = s3Uploader.uploadFile(file)
-
-        val curationImage = CurationImage(imageName)
-        curationImageRepository.save(curationImage)
-
-        return s3Uploader.baseUrl + imageName
-    }
+    fun uploadImage(file: MultipartFile): String =
+        s3Uploader.uploadFile(file).also { imageName ->
+            curationImageRepository.save(CurationImage(imageName))
+        }.let { s3Uploader.baseUrl + it }
 
     @Transactional(readOnly = true)
-    fun findByCurationId(curationId: Long): List<CurationImage> {
-        return curationImageRepository.findByCurationId(curationId)
-    }
+    fun findByCurationId(curationId: Long): List<CurationImage> = curationImageRepository.findByCurationId(curationId)
 
     @Transactional
-    fun deleteByImageName(imageName: String) {
-        curationImageRepository.deleteByImageName(imageName)
-    }
+    fun deleteByImageName(imageName: String) =curationImageRepository.deleteByImageName(imageName)
 
     @Transactional
-    fun deleteByCurationId(curationId: Long) {
-        curationImageRepository.deleteByCurationId(curationId)
-    }
+    fun deleteByCurationId(curationId: Long) = curationImageRepository.deleteByCurationId(curationId)
 }

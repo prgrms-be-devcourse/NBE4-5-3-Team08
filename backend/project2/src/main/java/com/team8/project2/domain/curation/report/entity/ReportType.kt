@@ -10,13 +10,9 @@ enum class ReportType(val description: String) {
 
     companion object {
         @JvmStatic
-        fun fromString(value: String?): ReportType {
-            for (type in entries) {
-                if (type.name.equals(value, ignoreCase = true)) { // 대소문자 구분 없이 비교
-                    return type
-                }
-            }
-            throw ServiceException("400-1", "잘못된 신고 유형입니다.")
-        }
+        fun fromString(value: String?): ReportType =
+            entries.firstOrNull { it.name.equals(value, ignoreCase = true) }
+                ?: throw ServiceException("400-1", "잘못된 신고 유형입니다.")
     }
 }
+

@@ -506,9 +506,9 @@ class CurationService(
         }
 
         val report = Report(
-            curation,
-            reportType,
-            actor,
+            curation = curation,
+            reportType = reportType,
+            reporter = actor,
         )
 
         reportRepository.save(report)
