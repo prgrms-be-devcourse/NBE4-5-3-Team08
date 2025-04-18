@@ -1,10 +1,28 @@
 plugins {
 	kotlin("jvm") version "1.9.25"
 	kotlin("plugin.spring") version "1.9.25"
-	kotlin("plugin.jpa") version "1.9.22"
+	kotlin("plugin.jpa") version "1.9.25"
+    kotlin("kapt") version "1.9.25"
+
+    kotlin("plugin.allopen") version "2.0.21"
+    kotlin("plugin.noarg") version "2.0.21"
 
 	id("org.springframework.boot") version "3.4.3"
 	id("io.spring.dependency-management") version "1.1.7"
+}
+
+// kotlin jpa : 아래의 어노테이션 클래스에 no-arg 생성자를 생성
+noArg {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
+}
+
+// kotlin jpa : 아래의 어노테이션 클래스를 open class 로 자동 설정
+allOpen {
+    annotation("jakarta.persistence.Entity")
+    annotation("jakarta.persistence.MappedSuperclass")
+    annotation("jakarta.persistence.Embeddable")
 }
 
 group = "com.team8"
@@ -14,6 +32,11 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
+}
+
+kotlin {
+    jvmToolchain(21)
+    sourceSets["main"].kotlin.srcDir("build/generated/source/kapt/main")
 }
 
 configurations {
@@ -49,13 +72,12 @@ dependencies {
     // Database (MySQL)
     implementation("mysql:mysql-connector-java:8.0.33")
 
-
   	// Test
-	  testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
   	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	  testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.springframework.security:spring-security-test")
   	testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
-	  testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
 
     // 외부 링크의 메타 데이터 추출 라이브러리 Jsoup
     implementation("org.jsoup:jsoup:1.15.4")
@@ -79,11 +101,17 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.7") // 최신 버전 사용 권장
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("org.springframework.security:spring-security-test")
-    testImplementation("org.springframework.boot:spring-boot-starter-data-redis")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+    // QueryDSL (JPA & Kotlin용)
+    implementation("com.querydsl:querydsl-jpa:5.1.0:jakarta")
+    kapt("com.querydsl:querydsl-apt:5.1.0:jakarta")
+    kapt("jakarta.annotation:jakarta.annotation-api")
+    kapt("jakarta.persistence:jakarta.persistence-api")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "21"
+    }
 }
 
 tasks.test {
